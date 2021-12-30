@@ -1,5 +1,25 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import UserService from "../../services/user.service"
 
-export default function handler(req, res) {
-  res.status(200).json({ name: 'John Doe' })
+const handler = async (req, res) => {
+    try {
+        const uid = req?.query?.uid
+        if (uid) {
+            const user = await UserService.findPermissionByUid(uid)
+            return res.status(200).json(user)
+        }
+        res.status(404).json({
+            status: 404,
+            error: 'Not Found',
+            message: 'Usuário Não Encontrado.'
+        })
+    } catch (error) {
+        const status = error.status || 500
+        res.status(status).json({
+            status,
+            error: error.title,
+            message: error.message
+        })
+    }
 }
+
+export default handler

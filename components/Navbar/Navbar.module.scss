@@ -1,0 +1,21 @@
+.navbar {
+    background     : #242526;
+    padding        : 0 16px;
+    margin         : 0;
+    height         : 55px;
+    border-bottom  : 1px solid #393a3b;
+    display        : flex;
+    justify-content: space-between;
+    align-items    : center;
+}
+
+.navbar a {
+    color         : #e4e6eb;
+    text-decoration: none;
+    padding-bottom : 2px;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+    cursor         : pointer;
+}
