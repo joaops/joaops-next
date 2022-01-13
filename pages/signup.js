@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Router from 'next/router'
 import { useState } from 'react'
 
 import styles from '../styles/Signup.module.scss'
@@ -24,7 +25,8 @@ export default function Signup() {
         const status = response.status
         if (status === 201) {
             const user = await response.json()
-            console.log(user)
+            // console.log(user)
+            Router.replace('/login')
         }
     }
 

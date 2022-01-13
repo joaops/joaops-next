@@ -1,0 +1,60 @@
+.container {
+    border          : 1px solid #3C3C3C;
+    background-color: #191919;
+    width           : 320px;
+
+    .header {
+        display: flex;
+
+        .move {
+            display         : flex;
+            cursor          : move;
+            background-color: #000;
+            color           : #FFF;
+            align-items     : center;
+            justify-content : center;
+            height          : 35px;
+            width           : 285px;
+        }
+
+        .button {
+            height    : 35px;
+            width     : 35px;
+            outline   : none;
+            color     : #FFF;
+            background: #000;
+            border    : none;
+
+            &:hover {
+                background: #E81123;
+            }
+        }
+    }
+
+    .scrollbar {
+        max-height: 435px;
+        overflow  : auto;
+
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #191919;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background   : #444;
+            border-radius: 8px;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .paragraph {
+            outline: 0px solid transparent;
+            margin : 8px;
+        }
+    }
+}

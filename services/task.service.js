@@ -57,7 +57,7 @@ const update = async (uid, id, text, top, left) => {
             left: task.left
         }
     }
-    var error = new Error('Tarefa Não Encontrada.')
+    let error = new Error('Tarefa Não Encontrada.')
     error.status = 404
     error.title = 'Not Found'
     throw error

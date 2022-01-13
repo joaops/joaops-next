@@ -21,6 +21,11 @@ export default function Navbar() {
                 </Link>
             }
             {user &&
+                <Link href={`/notes`}>
+                    <a>Notes</a>
+                </Link>
+            }
+            {user &&
                 <Link href={`/tasks`}>
                     <a>Tasks</a>
                 </Link>

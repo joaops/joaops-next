@@ -101,7 +101,7 @@ const ArticleSchema = new Schema({
 }, { versionKey: false, timestamps: true })
 
 // Estou usando uma propriedade virtual para conseguir popular os dados do usuário usando o uid
-// Faço isso pois eu não usei o uid como chave primária na tabela do usuário
+// Faço isso pois eu não usei o uid do firebase como chave primária na tabela do usuário
 // Pois o uid tinha tamanho de 28 caracteres e o MongoDB só aceita tamanho de 24 para a chave primária
 ArticleSchema.virtual('user', {
     ref: 'user',
@@ -110,8 +110,53 @@ ArticleSchema.virtual('user', {
     justOne: true
 })
 
+const FolderSchema = new Schema({
+    name: {
+        type: String,
+        default: ''
+    },
+    top: {
+        type: Number,
+        default: 0
+    },
+    left: {
+        type: Number,
+        default: 0
+    },
+    user_uid: {
+        type: String
+    },
+    parent: { type: Schema.Types.ObjectId, ref: 'folder' }
+}, { versionKey: false, timestamps: true })
+
+const NoteSchema = new Schema({
+    contents: {
+        type: String,
+        default: ''
+    },
+    top: {
+        type: Number,
+        default: 0
+    },
+    left: {
+        type: Number,
+        default: 0
+    },
+    width: {
+        type: Number,
+        default: 0
+    },
+    height: {
+        type: Number,
+        default: 0
+    },
+    parent: { type: Schema.Types.ObjectId, ref: 'folder' }
+}, { versionKey: false, timestamps: true })
+
 // export const connection = mongoose
 export const UserModel = mongoose.models.user || mongoose.model('user', UserSchema)
 export const TaskModel = mongoose.models.task || mongoose.model('task', TaskSchema)
 export const TagModel = mongoose.models.tag || mongoose.model('tag', TagSchema)
 export const ArticleModel = mongoose.models.article || mongoose.model('article', ArticleSchema)
+export const FolderModel = mongoose.models.folder || mongoose.model('folder', FolderSchema)
+export const NoteModel = mongoose.models.note || mongoose.model('note', NoteSchema)
