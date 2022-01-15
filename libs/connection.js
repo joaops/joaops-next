@@ -40,25 +40,6 @@ const UserSchema = new Schema({
     },
 }, { versionKey: false })
 
-const TaskSchema = new Schema({
-    text: {
-        type: String,
-        default: ''
-    },
-    top: {
-        type: Number,
-        default: 0
-    },
-    left: {
-        type: Number,
-        default: 0
-    },
-    user_uid: {
-        type: String,
-        ref: 'user.uid'
-    }
-}, { versionKey: false })
-
 const TagSchema = new Schema({
     name: {
         type: String,
@@ -155,7 +136,6 @@ const NoteSchema = new Schema({
 
 // export const connection = mongoose
 export const UserModel = mongoose.models.user || mongoose.model('user', UserSchema)
-export const TaskModel = mongoose.models.task || mongoose.model('task', TaskSchema)
 export const TagModel = mongoose.models.tag || mongoose.model('tag', TagSchema)
 export const ArticleModel = mongoose.models.article || mongoose.model('article', ArticleSchema)
 export const FolderModel = mongoose.models.folder || mongoose.model('folder', FolderSchema)

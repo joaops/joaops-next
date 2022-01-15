@@ -25,11 +25,6 @@ export default function Navbar() {
                     <a>Notes</a>
                 </Link>
             }
-            {user &&
-                <Link href={`/tasks`}>
-                    <a>Tasks</a>
-                </Link>
-            }
             {user && user.permission === 'admin' &&
                 <Link href={`/dashboard`}>
                     <a>Dashboard</a>

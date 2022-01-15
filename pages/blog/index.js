@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Head from 'next/head'
 
 import ArticleService from '../../services/article.service'
 
@@ -8,6 +9,11 @@ import styles from '../../styles/Blog.module.scss'
 export default function Blog({ articles, total, page, limit }) {
     return (
         <div className={styles.container}>
+            <Head>
+                <title>Blog</title>
+                <meta name="description" content="Página do Blog com as últimas postagens do site https://joaops.com.br" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
             <h1>Blog</h1>
             <div>
                 {articles.map(article => (
