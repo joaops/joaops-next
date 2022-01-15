@@ -23,6 +23,72 @@
     --ck-todo-list-checkmark-size      : 16px;
 }
 
+.ck-editor__editable_inline p {
+    color        : #E4E6EB;
+    margin-top   : 6px;
+    margin-bottom: 6px;
+}
+
+.ck-editor__editable_inline span {
+    color: #E4E6EB;
+}
+
+.ck-editor__editable_inline code {
+    color: #E4E6EB;
+}
+
+h1.titulo_1 {
+    color        : #E4E6EB;
+    margin-top   : 6px;
+    margin-bottom: 0px;
+}
+
+h1.titulo_1:first-child {
+    position: relative;
+    top: -10px;
+}
+
+h2.titulo_2 {
+    color        : #E4E6EB;
+    margin-top   : 6px;
+    margin-bottom: 6px;
+}
+
+h2.titulo_2:first-child {
+    position: relative;
+    top: -6px;
+}
+
+h3.titulo_3 {
+    color        : #E4E6EB;
+    margin-top   : 4px;
+    margin-bottom: 4px;
+}
+
+h4.titulo_4 {
+    color        : #E4E6EB;
+    margin-top   : 4px;
+    margin-bottom: 4px;
+}
+
+h5.titulo_5 {
+    color        : #E4E6EB;
+    margin-top   : 2px;
+    margin-bottom: 2px;
+}
+
+h6.titulo_6 {
+    color        : #E4E6EB;
+    margin-top   : 2px;
+    margin-bottom: 2px;
+}
+
+p.paragrafo {
+    color        : #E4E6EB;
+    margin-top   : 6px;
+    margin-bottom: 6px;
+}
+
 /* ckeditor5-image/theme/imagecaption.css */
 .ck-content .image>figcaption {
     display         : table-caption;
@@ -460,6 +526,7 @@
 }
 
 @media print {
+
     /* ckeditor5-page-break/theme/pagebreak.css */
     .ck-content .page-break {
         padding: 0;

@@ -82,6 +82,10 @@ const Note = ({ note, update, exclude }) => {
     }
 
     const handleChange = (event, editor) => {
+        /*editor.editing.view.change(writer => {
+            const viewEditableRoot = editor.editing.view.document.getRoot()
+            writer.removeClass('ck-editor__editable_inline', viewEditableRoot)
+        })*/
         const data = editor.getData()
         setContents(data)
         // colocar um tempo para salvar a nota depois de editar?
