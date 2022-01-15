@@ -6,7 +6,7 @@ const findRoot = async (uid) => {
     if (root) {
         return formatFolder(root)
     }
-    const model = new FolderModel({ name: 'Root', user_uid: uid, parent: null })
+    const model = new FolderModel({ name: 'Home', user_uid: uid, parent: null })
     root = await model.save()
     return formatFolder(root)
 }

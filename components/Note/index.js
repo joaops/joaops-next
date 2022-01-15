@@ -115,24 +115,10 @@ const Note = ({ note, update, exclude }) => {
                 <button className={styles.button} onClick={deleteNote}>X</button>
             </div>
             <div id={'note_height_' + note.id} className={styles.scrollbar}>
-                <NoteEditor className={styles.paragraph} data={contents} onReady={handleReady} onChange={handleChange} onBlur={handleBlur} />
+                <NoteEditor data={contents} top={note.top} onReady={handleReady} onChange={handleChange} onBlur={handleBlur} />
             </div>
         </div>
     )
 }
 
 export default Note
-
-/**
- * TODO:
- * Adicionar Títulos, <h1>, <h2>, etc.
- * Adicionar Texto com <p>
- * Adicionar Lista do Tipo Checkbox.
- * Adicionar Lista do Tipo Simples e Numerada, <ul> e <ol>.
- * Adicionar Indentação nas Listas.
- * Adicionar Negrito, Itálico e Sublinhado.
- * Adicionar Cor da Fonte.
- * Adicionar Alinhamento.
- * Adicionar Links.
- * Adicionar Imagens com URL.
- */

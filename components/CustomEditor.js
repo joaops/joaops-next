@@ -66,8 +66,9 @@ export default function CustomEditor({ data, onReady, onChange, onBlur, onFocus 
     // Implementar o Adaptador de Upload de Imagens no Firebase Storage
 
     const handleReady = (editor) => {
-        console.log('onReady')
-        // Desativar o Upload de Imagens em Base64
+        // console.log('onReady')
+        // Desativar o Upload de Imagens em Base64 por enquanto
+        // TODO: Implementar o Upload de Imagens no Firebase
         editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
             // return new MyUploadAdapter(loader)
             return null

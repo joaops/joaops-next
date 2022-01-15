@@ -9,9 +9,10 @@
     },
     "dependencies": {
         "@ckeditor/ckeditor5-react": "^3.0.3",
+        "@ckeditor/ckeditor5-ui": "^31.1.0",
         "ckeditor5-custom-build": "file:ckeditor5",
         "ckeditor5-inline": "file:ckeditor5-inline",
-        "firebase": "^9.6.1",
+        "firebase": "^9.6.3",
         "firebase-admin": "^10.0.1",
         "highlight.js": "^11.3.1",
         "mongoose": "^6.1.3",

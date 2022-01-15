@@ -13,3 +13,42 @@ body {
         height: 100%;
     }
 }
+
+// Ajustes do CKEditor para o componente NoteEditor
+
+.ck-editor__editable_inline {
+
+    h1, h2, h3, h4, h5, h6 {
+        color        : #E4E6EB;
+        margin-top   : 0px;
+        margin-bottom: 0px;
+
+        &:first-child {
+            margin-top: 6px !important; // usar o !important para não sobrescrever o margin-top do componente
+        }
+    }
+
+    p {
+        color        : #E4E6EB;
+        margin-top   : 4px;
+        margin-bottom: 4px;
+
+        &:first-child:last-child {
+            margin-top: 6px !important;
+            margin-bottom: 6px !important;
+        }
+    }
+
+    span {
+        color: #E4E6EB;
+    }
+
+    code {
+        color: #E4E6EB;
+    }
+
+    ul, ol {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+}
