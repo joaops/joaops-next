@@ -49,7 +49,7 @@ export default function Notes() {
         headers.append('Content-Type', 'application/json')
         headers.append('Authorization', `Bearer ${user.token}`)
         const body = {
-            name: 'Nova Pasta', top: 100, left: 100, parent: folder.id
+            name: 'Nova Pasta', top: 50, left: 260, parent: folder.id
         }
         const options = {
             method: 'POST',
@@ -132,7 +132,7 @@ export default function Notes() {
         headers.append('Content-Type', 'application/json')
         headers.append('Authorization', `Bearer ${user.token}`)
         const body = {
-            contents: '', top: 110, left: 20, width: 285, height: 35, parent: folder.id
+            contents: '', top: 50, left: 170, width: 322, height: 67, parent: folder.id
         }
         const options = {
             method: 'POST',
@@ -235,14 +235,12 @@ export default function Notes() {
     return (
         <div className={styles.container}>
             <Breadcrumb breadcrumb={breadcrumb} goTo={enterTheFolder} />
-            <div>
-                <button onClick={createNewFolder}>Criar Pasta</button>
-                {
-                    selected &&
-                    <button onMouseDown={() => deleteFolder(selected)}>Excluir Pasta</button>
-                }
-                <button onClick={createNewNote}>Criar Nota</button>
-            </div>
+            <button onClick={createNewFolder}>Criar Pasta</button>
+            {
+                selected &&
+                <button onMouseDown={() => deleteFolder(selected)}>Excluir Pasta</button>
+            }
+            <button onClick={createNewNote}>Criar Nota</button>
             {
                 renderFoldersNotes()
             }

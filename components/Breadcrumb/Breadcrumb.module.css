@@ -3,6 +3,7 @@
     list-style      : none;
     background-color: #191919;
     margin-top      : 0;
+    margin-bottom   : 4px;
 }
 
 .breadcrumb li {

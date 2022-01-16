@@ -82,13 +82,14 @@ const Note = ({ note, update, exclude }) => {
     }
 
     const handleChange = (event, editor) => {
-        /*editor.editing.view.change(writer => {
-            const viewEditableRoot = editor.editing.view.document.getRoot()
-            writer.removeClass('ck-editor__editable_inline', viewEditableRoot)
-        })*/
+        editor.ui.viewportOffset = { top: top + 56 }
         const data = editor.getData()
         setContents(data)
         // colocar um tempo para salvar a nota depois de editar?
+    }
+
+    const handleFocus = (event, editor) => {
+        editor.ui.viewportOffset = { top: top + 56 }
     }
 
     const handleBlur = () => {
@@ -115,7 +116,7 @@ const Note = ({ note, update, exclude }) => {
                 <button className={styles.button} onClick={deleteNote}>X</button>
             </div>
             <div id={'note_height_' + note.id} className={styles.scrollbar}>
-                <NoteEditor data={contents} top={note.top} onReady={handleReady} onChange={handleChange} onBlur={handleBlur} />
+                <NoteEditor data={contents} onReady={handleReady} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} />
             </div>
         </div>
     )

@@ -2,7 +2,7 @@ import Editor from 'ckeditor5-inline'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 // import { useEffect, useState } from 'react'
 
-export default function NoteEditor({ data, top, onReady, onChange, onBlur, onFocus }) {
+export default function NoteEditor({ data, onReady, onChange, onBlur, onFocus }) {
     
     const editorConfiguration = {
         toolbar: {
@@ -28,8 +28,8 @@ export default function NoteEditor({ data, top, onReady, onChange, onBlur, onFoc
             ],
             shouldNotGroupWhenFull: true
         },
-        /* ui: {
-            viewportOffset: { top: top + 46 },
+        /*ui: {
+            viewportOffset: { top: 10 },
         },*/
         language: 'pt-br',
         heading: {
