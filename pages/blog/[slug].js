@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import hljs from 'highlight.js'
 import Head from 'next/head'
 import Router from 'next/router'
@@ -9,6 +9,7 @@ import styles from '../../styles/Article.module.scss'
 
 export default function Article({ article }) {
     const { loading, user } = useAuth()
+    const [checkedDeletePost, setCheckedDeletePost] = useState(false)
 
     useEffect(() => {
         hljs.highlightAll()
@@ -57,7 +58,8 @@ export default function Article({ article }) {
             {user && user.uid === article.user_uid &&
                 <div>
                     <button onClick={handleUpdate}>Atualizar</button>
-                    <button onClick={handleDelete}>Deletar</button>
+                    <input type="checkbox" checked={checkedDeletePost} onChange={e => setCheckedDeletePost(!checkedDeletePost)} />
+                    <button onClick={handleDelete} disabled={!checkedDeletePost}>Deletar</button>
                 </div>
             }
             <div>
@@ -93,8 +95,8 @@ export async function getStaticProps(context) {
     }
     return {
         props: {
-            article,
-            revalidate: 60
-        }
+            article
+        },
+        revalidate: 60
     }
 }

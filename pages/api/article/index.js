@@ -9,6 +9,8 @@ const handler = async (req, res) => {
                 return handleGet(req, res)
             case 'POST':
                 return handlePost(req, res)
+            case 'PUT':
+                return handlePut(req, res)
             case 'DELETE':
                 return handleDelete(req, res)
             default:
@@ -61,6 +63,40 @@ const handlePost = withAuth(async (req, res) => {
     const uid = req.uid
     const article = await ArticleService.create(uid, title, description, contents, image, tags)
     return res.status(201).json(article)
+})
+
+const handlePut = withAuth(async (req, res) => {
+    const { id = null, title = null, description = null, contents = null, image = null, tags = [] } = req.body
+    if (id === null) {
+        var error = new Error('id é obrigatório.')
+        error.status = 400
+        error.title = 'Bad Request'
+        throw error
+    }
+    if (title === null) {
+        var error = new Error('title é obrigatório.')
+        error.status = 400
+        error.title = 'Bad Request'
+        throw error
+    }
+    if (description === null) {
+        var error = new Error('description é obrigatório.')
+        error.status = 400
+        error.title = 'Bad Request'
+        throw error
+    }
+    if (contents === null) {
+        var error = new Error('contents é obrigatório.')
+        error.status = 400
+        error.title = 'Bad Request'
+        throw error
+    }
+    if (image === null) {
+        image = 'http://mpmco.com/wp-content/uploads/2018/02/placeholder.jpg'
+    }
+    const uid = req.uid
+    const article = await ArticleService.updateOne(uid, id, title, description, contents, image, tags)
+    return res.status(200).json(article)
 })
 
 const handleDelete = withAuth(async (req, res) => {

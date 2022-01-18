@@ -12,6 +12,7 @@ export default function Editor() {
     const { loading, user } = useAuth()
     const router = useRouter()
 
+    const [id, setId] = useState('')
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [image, setImage] = useState('')
@@ -28,11 +29,11 @@ export default function Editor() {
     }, [user])
 
     useEffect(() => {
-        if (router.query.slug) {
-            // loadArticle(router.query.slug)
-            console.log('router.query.slug:', router.query.slug)
+        if (router.query.slug && user) {
+            // console.log('router.query.slug:', router.query.slug)
+            loadArticle(router.query.slug)
         }
-    }, [router.query.slug])
+    }, [router.query.slug, user])
 
     const loadTags = async () => {
         const headers = new Headers()
@@ -48,6 +49,29 @@ export default function Editor() {
             setTags(data)
         }
     }
+
+    const loadArticle = async (slug) => {
+        const headers = new Headers()
+        headers.append('Content-Type', 'application/json')
+        const options = {
+            method: 'GET',
+            headers
+        }
+        const response = await fetch(`/api/article/${slug}`, options)
+        const status = response.status
+        if (status === 200) {
+            const data = await response.json()
+            if (user.uid === data.user_uid) {
+                setId(data.id)
+                setTitle(data.title)
+                setDescription(data.description)
+                setImage(data.image)
+                setTagsArtigo(data.tags)
+                setContents(data.contents)
+            }
+        }
+    }
+
 
     const criarTag = async () => {
         const headers = new Headers()
@@ -99,6 +123,32 @@ export default function Editor() {
         const response = await fetch('/api/article', options)
         const status = response.status
         if (status === 201) {
+            const article = await response.json()
+            console.log(article.slug)
+            Router.push(`/blog/${article.slug}`)
+        }
+    }
+
+    const atualizarArtigo = async () => {
+        const headers = new Headers()
+        headers.append('Content-Type', 'application/json')
+        headers.append('Authorization', `Bearer ${user.token}`)
+        const body = JSON.stringify({
+            id,
+            title,
+            description,
+            image,
+            tags: tagsArtigo.map(t => t.id),
+            contents
+        })
+        const options = {
+            method: 'PUT',
+            headers,
+            body
+        }
+        const response = await fetch('/api/article', options)
+        const status = response.status
+        if (status === 200) {
             const article = await response.json()
             console.log(article.slug)
             Router.push(`/blog/${article.slug}`)
@@ -178,7 +228,9 @@ export default function Editor() {
                 </div>
                 <CustomEditor data={contents} onReady={handleReady} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} />
                 <div>
-                    <button onClick={salvarArtigo}>Salvar</button>
+                    {
+                        id ? <button onClick={atualizarArtigo}>Atualizar</button> : <button onClick={salvarArtigo}>Salvar</button>
+                    }
                 </div>
             </div>
         </div>

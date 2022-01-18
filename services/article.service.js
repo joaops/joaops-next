@@ -32,6 +32,29 @@ const create = async (uid, title, description, contents, image, tags) => {
     }
 }
 
+const updateOne = async (uid, id, title, description, contents, image, tags) => {
+    console.log('ArticleService.updateOne()')
+    const articleExists = await ArticleModel.exists({ user_uid: uid, _id: id })
+    if (!articleExists) {
+        let error = new Error('Artigo Não Encontrado.')
+        error.status = 404
+        error.title = 'Not Found'
+        throw error
+    }
+    const slug = slugify(title, { lower: true })
+    const update = {
+        user_uid: uid,
+        title,
+        description,
+        contents,
+        slug,
+        image,
+        tags
+    }
+    const article = await ArticleModel.findOneAndUpdate({ _id: id, user_uid: uid }, update, { new: true }).populate('tags').populate({ path: 'user', select: 'name -_id' })
+    return formatArticle(article)
+}
+
 const getSlugs = async () => {
     console.log('ArticleService.getSlugs()')
     return await ArticleModel.find({}).select('slug -_id')
@@ -50,19 +73,7 @@ const getOneBySlug = async (slug) => {
         error.title = 'Not Found'
         throw error*/
     }
-    return {
-        id: article._id.toString(),
-        slug: article.slug,
-        title: article.title,
-        description: article.description,
-        contents: article.contents,
-        image: article.image,
-        tags: article.tags.map(t => { return { id: t._id.toString(), name: t.name } }),
-        createdAt: article.createdAt.toString(),
-        updatedAt: article.updatedAt.toString(),
-        user_uid: article.user_uid,
-        username: article.user.name
-    }
+    return formatArticle(article)
 }
 
 const getArticlesByPage = async (page, limit) => {
@@ -101,8 +112,25 @@ const deleteOne = async (uid, id) => {
     await ArticleModel.deleteOne({ _id: id, user_uid: uid })
 }
 
+const formatArticle = (article) => {
+    return {
+        id: article._id.toString(),
+        slug: article.slug,
+        title: article.title,
+        description: article.description,
+        contents: article.contents,
+        image: article.image,
+        tags: article.tags.map(t => { return { id: t._id.toString(), name: t.name } }),
+        createdAt: article.createdAt.toString(),
+        updatedAt: article.updatedAt.toString(),
+        user_uid: article.user_uid,
+        username: article.user.name
+    }
+}
+
 const ArticleService = {
     create,
+    updateOne,
     getSlugs,
     getOneBySlug,
     getArticlesByPage,

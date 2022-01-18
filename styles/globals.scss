@@ -14,9 +14,29 @@ body {
     }
 }
 
+// Concertando a cor do texto do CustomEditor
+
+.ck.ck-reset {
+    h1, h2, h3, h4, h5, h6 {
+        color: #18191A !important;
+    }
+
+    p {
+        color: #18191A !important;
+    }
+
+    span {
+        color: #18191A !important;
+    }
+
+    code {
+        color: #18191A !important;
+    }
+}
+
 // Ajustes do CKEditor para o componente NoteEditor
 
-.ck-editor__editable_inline {
+.ck.ck-editor__editable_inline {
 
     h1, h2, h3, h4, h5, h6 {
         color        : #E4E6EB;
@@ -34,7 +54,7 @@ body {
         margin-bottom: 4px;
 
         &:first-child:last-child {
-            margin-top: 6px !important;
+            margin-top   : 6px !important;
             margin-bottom: 6px !important;
         }
     }
@@ -48,7 +68,7 @@ body {
     }
 
     ul, ol {
-        margin-top: 6px;
+        margin-top   : 6px;
         margin-bottom: 6px;
     }
 }
