@@ -1,13 +1,24 @@
 import { useEffect, useState } from 'react'
 import hljs from 'highlight.js'
 import Head from 'next/head'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 
 import { useAuth } from '../../contexts/auth'
 import ArticleService from '../../services/article.service'
 import styles from '../../styles/Article.module.scss'
 
 export default function Article({ article }) {
+    const router = useRouter()
+
+    // enquando o artigo não estiver carregado
+    if (router.isFallback) {
+        return (
+            <div className={styles.container}>
+                <h1>Loading...</h1>
+            </div>
+        )
+    }
+
     const { loading, user } = useAuth()
     const [checkedDeletePost, setCheckedDeletePost] = useState(false)
 
@@ -79,7 +90,7 @@ export async function getStaticPaths() {
         params: { slug: slug.slug }
     }))
     // console.log(paths)
-    return { paths, fallback: 'blocking' }
+    return { paths, fallback: true }
 }
 
 export async function getStaticProps(context) {
@@ -90,13 +101,13 @@ export async function getStaticProps(context) {
     if (!article) {
         return {
             notFound: true,
-            revalidate: 60
+            revalidate: 600
         }
     }
     return {
         props: {
             article
         },
-        revalidate: 60
+        revalidate: 600 // 10 minutos para recriar o artigo
     }
 }
