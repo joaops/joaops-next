@@ -21,28 +21,28 @@ export default function Notes() {
     useEffect(() => {
         // carregar a pasta raiz
         if (user) {
+            const findRootFolder = async () => {
+                const headers = new Headers()
+                headers.append('Content-Type', 'application/json')
+                headers.append('Authorization', `Bearer ${user.token}`)
+                const options = {
+                    method: 'GET',
+                    headers
+                }
+                const response = await fetch('/api/folder', options)
+                const status = response.status
+                if (status === 200) {
+                    const data = await response.json()
+                    setFolder(data.folder)
+                    setSubfolders(data.subfolders)
+                    setNotes(data.notes)
+                    setBreadcrumb(data.breadcrumb)
+                }
+            }
+
             findRootFolder()
         }
     }, [user])
-
-    const findRootFolder = async () => {
-        const headers = new Headers()
-        headers.append('Content-Type', 'application/json')
-        headers.append('Authorization', `Bearer ${user.token}`)
-        const options = {
-            method: 'GET',
-            headers
-        }
-        const response = await fetch('/api/folder', options)
-        const status = response.status
-        if (status === 200) {
-            const data = await response.json()
-            setFolder(data.folder)
-            setSubfolders(data.subfolders)
-            setNotes(data.notes)
-            setBreadcrumb(data.breadcrumb)
-        }
-    }
 
     const createNewFolder = async () => {
         const headers = new Headers()

@@ -5,7 +5,7 @@ import UserService from './user.service'
 
 const create = async (uid, title, description, contents, image, tags) => {
     console.log('ArticleService.create()')
-    const slug = slugify(title, { lower: true })
+    const slug = slugify(title, { lower: true, strict: true })
     const article = {
         user_uid: uid,
         title,
@@ -41,7 +41,7 @@ const updateOne = async (uid, id, title, description, contents, image, tags) => 
         error.title = 'Not Found'
         throw error
     }
-    const slug = slugify(title, { lower: true })
+    const slug = slugify(title, { lower: true, strict: true })
     const update = {
         user_uid: uid,
         title,

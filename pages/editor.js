@@ -24,6 +24,20 @@ export default function Editor() {
 
     useEffect(() => {
         if (user) {
+            const loadTags = async () => {
+                const headers = new Headers()
+                headers.append('Content-Type', 'application/json')
+                const options = {
+                    method: 'GET',
+                    headers
+                }
+                const response = await fetch('/api/tag', options)
+                const status = response.status
+                if (status === 200) {
+                    const data = await response.json()
+                    setTags(data)
+                }
+            }
             loadTags()
         }
     }, [user])
@@ -31,47 +45,30 @@ export default function Editor() {
     useEffect(() => {
         if (router.query.slug && user) {
             // console.log('router.query.slug:', router.query.slug)
+            const loadArticle = async (slug) => {
+                const headers = new Headers()
+                headers.append('Content-Type', 'application/json')
+                const options = {
+                    method: 'GET',
+                    headers
+                }
+                const response = await fetch(`/api/article/${slug}`, options)
+                const status = response.status
+                if (status === 200) {
+                    const data = await response.json()
+                    if (user.uid === data.user_uid) {
+                        setId(data.id)
+                        setTitle(data.title)
+                        setDescription(data.description)
+                        setImage(data.image)
+                        setTagsArtigo(data.tags)
+                        setContents(data.contents)
+                    }
+                }
+            }
             loadArticle(router.query.slug)
         }
     }, [router.query.slug, user])
-
-    const loadTags = async () => {
-        const headers = new Headers()
-        headers.append('Content-Type', 'application/json')
-        const options = {
-            method: 'GET',
-            headers
-        }
-        const response = await fetch('/api/tag', options)
-        const status = response.status
-        if (status === 200) {
-            const data = await response.json()
-            setTags(data)
-        }
-    }
-
-    const loadArticle = async (slug) => {
-        const headers = new Headers()
-        headers.append('Content-Type', 'application/json')
-        const options = {
-            method: 'GET',
-            headers
-        }
-        const response = await fetch(`/api/article/${slug}`, options)
-        const status = response.status
-        if (status === 200) {
-            const data = await response.json()
-            if (user.uid === data.user_uid) {
-                setId(data.id)
-                setTitle(data.title)
-                setDescription(data.description)
-                setImage(data.image)
-                setTagsArtigo(data.tags)
-                setContents(data.contents)
-            }
-        }
-    }
-
 
     const criarTag = async () => {
         const headers = new Headers()

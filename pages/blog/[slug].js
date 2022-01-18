@@ -9,16 +9,6 @@ import styles from '../../styles/Article.module.scss'
 
 export default function Article({ article }) {
     const router = useRouter()
-
-    // enquando o artigo não estiver carregado
-    if (router.isFallback) {
-        return (
-            <div className={styles.container}>
-                <h1>Loading...</h1>
-            </div>
-        )
-    }
-
     const { loading, user } = useAuth()
     const [checkedDeletePost, setCheckedDeletePost] = useState(false)
 
@@ -45,6 +35,15 @@ export default function Article({ article }) {
         if (status === 200) {
             Router.replace(`/blog`)
         }
+    }
+
+    // enquando o artigo não estiver carregado
+    if (router.isFallback) {
+        return (
+            <div className={styles.container}>
+                <h1>Loading...</h1>
+            </div>
+        )
     }
 
     if (loading) {
