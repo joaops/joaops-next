@@ -1,8 +1,10 @@
 // import { withAuth } from "../../../middlewares/withAuth"
+import dbConnect from "../../../libs/dbConnect"
 import ArticleService from "../../../services/article.service"
 
 const handler = async (req, res) => {
     try {
+        await dbConnect()
         switch (req.method) {
             case 'GET':
                 return handleGet(req, res)

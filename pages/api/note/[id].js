@@ -1,8 +1,10 @@
+import dbConnect from "../../../libs/dbConnect"
 import { withAuth } from "../../../middlewares/withAuth"
 import NoteService from "../../../services/note.service"
 
 const handler = async (req, res) => {
     try {
+        await dbConnect()
         switch (req.method) {
             case 'PUT':
                 return handlePut(req, res)

@@ -1,4 +1,6 @@
-import { FolderModel, NoteModel } from '../libs/connection'
+// import { FolderModel, NoteModel } from '../libs/connection'
+import FolderModel from '../models/folder.model'
+import NoteModel from '../models/note.model'
 
 // Retorna a pasta Raiz ou Cria uma nova
 const findRoot = async (uid) => {

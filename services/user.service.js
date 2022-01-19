@@ -1,7 +1,9 @@
 import { auth } from '../libs/firebase-admin'
 // import connect from "../libs/database"
 // import UserModel from '../models/user.model'
-import { UserModel } from '../libs/connection'
+// import { UserModel } from '../libs/connection'
+
+import UserModel from '../models/user.model'
 
 const createUser = async (name, email, password, permission, photoURL, disabled) => {
     console.log('UserService.createUser()')

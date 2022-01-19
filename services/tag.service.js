@@ -1,6 +1,8 @@
 // import connect from "../libs/database"
 // import TagModel from "../models/tag.model"
-import { TagModel } from "../libs/connection"
+// import { TagModel } from "../libs/connection"
+
+import TagModel from "../models/tag.model"
 
 const create = async (name) => {
     console.log('TagService.create()')

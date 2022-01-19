@@ -1,6 +1,7 @@
 import slugify from 'slugify'
 
-import { ArticleModel } from '../libs/connection'
+import ArticleModel from '../models/article.model'
+// import { ArticleModel } from '../libs/connection'
 import UserService from './user.service'
 
 const create = async (uid, title, description, contents, image, tags) => {

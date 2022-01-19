@@ -1,9 +1,10 @@
+import dbConnect from "../../../libs/dbConnect"
 import { withAuth } from "../../../middlewares/withAuth"
 import TagService from "../../../services/tag.service"
 
 const handler = async (req, res) => {
     try {
-        console.log('/api/tag')
+        await dbConnect()
         switch (req.method) {
             case 'POST':
                 // withAuth(req, res)
@@ -30,6 +31,7 @@ const handler = async (req, res) => {
 
 // é necessário um usuário logado para criar uma tag
 const handlePost = withAuth(async (req, res) => {
+    console.log('/api/tag POST')
     // console.log(req.uid)
     const { name = null } = req.body
     if (name === null) {
@@ -43,6 +45,7 @@ const handlePost = withAuth(async (req, res) => {
 })
 
 const handleGet = async (req, res) => {
+    console.log('/api/tag GET')
     const tags = await TagService.findAll()
     return res.status(200).json(tags)
 }

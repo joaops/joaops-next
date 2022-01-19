@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import hljs from 'highlight.js'
 import Head from 'next/head'
-import Router, { useRouter } from 'next/router'
+import Router from 'next/router'
 
 import { useAuth } from '../../contexts/auth'
 import ArticleService from '../../services/article.service'
 import styles from '../../styles/Article.module.scss'
+import dbConnect from '../../libs/dbConnect'
 
 export default function Article({ article }) {
-    const router = useRouter()
     const { loading, user } = useAuth()
     const [checkedDeletePost, setCheckedDeletePost] = useState(false)
 
@@ -35,15 +35,6 @@ export default function Article({ article }) {
         if (status === 200) {
             Router.replace(`/blog`)
         }
-    }
-
-    // enquando o artigo não estiver carregado
-    if (router.isFallback) {
-        return (
-            <div className={styles.container}>
-                <h1>Loading...</h1>
-            </div>
-        )
     }
 
     if (loading) {
@@ -83,18 +74,20 @@ export default function Article({ article }) {
 export async function getStaticPaths() {
     // consultar todos os slugs para montar o paths
     // tem que ter pelo menos 1, ou ocasionará um erro durante o build
+    await dbConnect()
     const slugs = await ArticleService.getSlugs()
     // console.log(slugs)
     const paths = slugs.map(slug => ({
         params: { slug: slug.slug }
     }))
     // console.log(paths)
-    return { paths, fallback: true }
+    return { paths, fallback: 'blocking' }
 }
 
 export async function getStaticProps(context) {
     const { params } = context
     const { slug } = params // consulta os dados do artigo usando o slug
+    await dbConnect()
     const article = await ArticleService.getOneBySlug(slug)
     // console.log('article', article)
     if (!article) {

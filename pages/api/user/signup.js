@@ -1,19 +1,32 @@
+import dbConnect from "../../../libs/dbConnect"
 import UserService from "../../../services/user.service"
 
 const handler = async (req, res) => {
-    switch (req.method) {
-        case 'POST':
-            return await handlePost(req, res)
-        default:
-            return res.status(405).json({
-                status: 405,
-                error: 'Method Not Allowed',
-                message: 'Apenas o método POST é Permetido Nesse Endpoint.'
-            })
+    try {
+        await dbConnect()
+        switch (req.method) {
+            case 'POST':
+                return await handlePost(req, res)
+            default:
+                return res.status(405).json({
+                    status: 405,
+                    error: 'Method Not Allowed',
+                    message: 'Apenas o método POST é Permetido Nesse Endpoint.'
+                })
+        }
+    } catch (error) {
+        const status = error.status || 500
+        const title = error.title || 'Internal Server Error'
+        return res.status(status).json({
+            status: status,
+            error: title,
+            message: error.message
+        })
     }
 }
 
 const handlePost = async (req, res) => {
+    console.log('/api/user/signup POST')
     const { name, email, password } = req.body
     if (!name || !email || !password) {
         return res.status(400).json({

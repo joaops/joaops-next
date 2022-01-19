@@ -1,4 +1,6 @@
-import { NoteModel, FolderModel } from '../libs/connection'
+// import { NoteModel, FolderModel } from '../libs/connection'
+import NoteModel from '../models/note.model'
+import FolderModel from '../models/folder.model'
 
 const createOne = async (uid, contents, top, left, width, height, parent) => {
     const folderExists = await FolderModel.exists({ user_uid: uid, _id: parent })

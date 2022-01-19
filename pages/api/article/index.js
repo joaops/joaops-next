@@ -1,9 +1,10 @@
+import dbConnect from "../../../libs/dbConnect"
 import { withAuth } from "../../../middlewares/withAuth"
 import ArticleService from "../../../services/article.service"
 
 const handler = async (req, res) => {
     try {
-        console.log('/api/article')
+        await dbConnect()
         switch (req.method) {
             case 'GET':
                 return handleGet(req, res)
@@ -33,11 +34,13 @@ const handler = async (req, res) => {
 
 // essa função não precisa de autenticação
 const handleGet = async (req, res) => {
+    console.log('/api/article GET')
     return res.status(200).json({})
 }
 
 // essa função usa o middleware withAuth para verificar se o usuário está autenticado
 const handlePost = withAuth(async (req, res) => {
+    console.log('/api/article POST')
     const { title = null, description = null, contents = null, image = null, tags = [] } = req.body
     if (title === null) {
         var error = new Error('title é obrigatório.')
@@ -66,6 +69,7 @@ const handlePost = withAuth(async (req, res) => {
 })
 
 const handlePut = withAuth(async (req, res) => {
+    console.log('/api/article PUT')
     const { id = null, title = null, description = null, contents = null, image = null, tags = [] } = req.body
     if (id === null) {
         var error = new Error('id é obrigatório.')
@@ -100,6 +104,7 @@ const handlePut = withAuth(async (req, res) => {
 })
 
 const handleDelete = withAuth(async (req, res) => {
+    console.log('/api/article DELETE')
     const { id = null } = req.body
     if (id === null) {
         var error = new Error('id é obrigatório.')

@@ -5,6 +5,7 @@ import ArticleService from '../../services/article.service'
 
 import Pagination from '../../components/Pagination'
 import styles from '../../styles/Blog.module.scss'
+import dbConnect from '../../libs/dbConnect'
 
 export default function Blog({ articles, total, page, limit }) {
     return (
@@ -37,6 +38,7 @@ export async function getServerSideProps(context) {
     const { query } = context
     const { page = 1 } = query
     const limit = 8
+    await dbConnect()
     const total = await ArticleService.getTotalOfArticles()
     const articles = await ArticleService.getArticlesByPage(page, limit)
     return {
