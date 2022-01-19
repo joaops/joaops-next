@@ -14,13 +14,13 @@
         "ckeditor5-inline": "file:ckeditor5-inline",
         "firebase": "^9.6.3",
         "firebase-admin": "^10.0.1",
-        "highlight.js": "^11.3.1",
-        "mongoose": "^6.1.3",
-        "next": "12.0.7",
+        "highlight.js": "^11.4.0",
+        "mongoose": "^6.1.7",
+        "next": "^12.0.7",
         "react": "17.0.2",
         "react-dom": "17.0.2",
-        "sass": "^1.45.1",
-        "slugify": "^1.6.4"
+        "sass": "^1.49.0",
+        "slugify": "^1.6.5"
     },
     "devDependencies": {
         "eslint": "8.5.0",

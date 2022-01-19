@@ -93,13 +93,13 @@ export async function getStaticProps(context) {
     if (!article) {
         return {
             notFound: true,
-            revalidate: 600
+            revalidate: 60
         }
     }
     return {
         props: {
             article
         },
-        revalidate: 600 // 10 minutos para recriar o artigo
+        revalidate: 60 // 1 minutos para recriar o artigo
     }
 }
