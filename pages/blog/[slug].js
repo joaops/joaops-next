@@ -75,6 +75,7 @@ export async function getStaticPaths() {
     // consultar todos os slugs para montar o paths
     // tem que ter pelo menos 1, ou ocasionará um erro durante o build
     await dbConnect()
+    // Não é necessário retornar todos os slugs, é retornado apenas 10 para diminuir o tempo de build
     const slugs = await ArticleService.getSlugs()
     // console.log(slugs)
     const paths = slugs.map(slug => ({

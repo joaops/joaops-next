@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import Head from 'next/head'
 
 import ArticleService from '../../services/article.service'
@@ -19,11 +18,11 @@ export default function Blog({ articles, total, page, limit }) {
             <div>
                 {articles.map(article => (
                     <div key={article.id}>
-                        <Link href={`/blog/${article.slug}`} prefetch={false}>
-                            <a>
+                        <div>
+                            <a href={`/blog/${article.slug}`}>
                                 <h2>{article.title}</h2>
                             </a>
-                        </Link>
+                        </div>
                         <p>{article.description}</p>
                     </div>
                 ))}
@@ -47,36 +46,4 @@ export async function getServerSideProps(context) {
             limit,
         }
     }
-    /*try {
-        console.log('Tentando consultar a API');
-        const protocol = context.req.headers['x-forwarded-proto'] || 'http'
-        console.log('Protocolo: ', protocol)
-        const host = context.req.headers.host
-        const response = await fetch(`${protocol}://${host}/api/article?page=${page}&limit=${limit}`)
-        const data = await response.json()
-        const articles = data.articles
-        const total = data.total
-        console.log('Consulta da API realizada com sucesso')
-        return {
-            props: {
-                articles,
-                total,
-                page,
-                limit,
-            }
-        }
-    } catch (error) {
-        console.log('Erro ao consultar a API, consultando banco de dados')
-        await dbConnect()
-        const total = await ArticleService.getTotalOfArticles()
-        const articles = await ArticleService.getArticlesByPage(page, limit)
-        return {
-            props: {
-                articles,
-                total,
-                page,
-                limit,
-            }
-        }
-    }*/
 }

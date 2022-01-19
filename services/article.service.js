@@ -58,21 +58,15 @@ const updateOne = async (uid, id, title, description, contents, image, tags) => 
 
 const getSlugs = async () => {
     console.log('ArticleService.getSlugs()')
-    return await ArticleModel.find({}).select('slug -_id')
+    return await ArticleModel.find({}).select('slug -_id').sort({ createdAt: -1 }).limit(10)
 }
 
 const getOneBySlug = async (slug) => {
     console.log('ArticleService.getOneBySlug()')
     // user populate('user') para popular todos os dados do usuário ou populate({ path: 'user', select: 'name' }) para selecionar alguns dados
     const article = await ArticleModel.findOne({ slug }).populate('tags').populate({ path: 'user', select: 'name -_id' })
-    // console.log(article)
-    // console.log(article.user)
     if (!article) {
         return null
-        /*var error = new Error('Artigo Não Encontrado.')
-        error.status = 404
-        error.title = 'Not Found'
-        throw error*/
     }
     return formatArticle(article)
 }
