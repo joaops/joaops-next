@@ -19,7 +19,7 @@ export default function Blog({ articles, total, page, limit }) {
             <div>
                 {articles.map(article => (
                     <div key={article.id}>
-                        <Link href={`/blog/${article.slug}`}>
+                        <Link href={`/blog/${article.slug}`} prefetch={false}>
                             <a>
                                 <h2>{article.title}</h2>
                             </a>
