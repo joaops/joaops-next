@@ -34,9 +34,20 @@ export default function Blog({ articles, total, page, limit }) {
 }
 
 export async function getServerSideProps(context) {
-    // console.log('blog/index.js getServerSideProps')
+    console.log('blog/index.js getServerSideProps')
     const { page = 1, limit = 8 } = context.query
-    try {
+    await dbConnect()
+    const total = await ArticleService.getTotalOfArticles()
+    const articles = await ArticleService.getArticlesByPage(page, limit)
+    return {
+        props: {
+            articles,
+            total,
+            page,
+            limit,
+        }
+    }
+    /*try {
         console.log('Tentando consultar a API');
         const protocol = context.req.headers['x-forwarded-proto'] || 'http'
         console.log('Protocolo: ', protocol)
@@ -45,7 +56,7 @@ export async function getServerSideProps(context) {
         const data = await response.json()
         const articles = data.articles
         const total = data.total
-        console.log('Consulta a API realizada com sucesso')
+        console.log('Consulta da API realizada com sucesso')
         return {
             props: {
                 articles,
@@ -67,5 +78,5 @@ export async function getServerSideProps(context) {
                 limit,
             }
         }
-    }
+    }*/
 }
