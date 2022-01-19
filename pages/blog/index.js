@@ -35,18 +35,37 @@ export default function Blog({ articles, total, page, limit }) {
 
 export async function getServerSideProps(context) {
     // console.log('blog/index.js getServerSideProps')
-    const { query } = context
-    const { page = 1 } = query
-    const limit = 8
-    await dbConnect()
-    const total = await ArticleService.getTotalOfArticles()
-    const articles = await ArticleService.getArticlesByPage(page, limit)
-    return {
-        props: {
-            articles,
-            total,
-            page,
-            limit,
+    const { page = 1, limit = 8 } = context.query
+    try {
+        console.log('Tentando consultar a API');
+        const protocol = context.req.headers['x-forwarded-proto'] || 'http'
+        console.log('Protocolo: ', protocol)
+        const host = context.req.headers.host
+        const response = await fetch(`${protocol}://${host}/api/article?page=${page}&limit=${limit}`)
+        const data = await response.json()
+        const articles = data.articles
+        const total = data.total
+        console.log('Consulta a API realizada com sucesso')
+        return {
+            props: {
+                articles,
+                total,
+                page,
+                limit,
+            }
+        }
+    } catch (error) {
+        console.log('Erro ao consultar a API, consultando banco de dados')
+        await dbConnect()
+        const total = await ArticleService.getTotalOfArticles()
+        const articles = await ArticleService.getArticlesByPage(page, limit)
+        return {
+            props: {
+                articles,
+                total,
+                page,
+                limit,
+            }
         }
     }
 }

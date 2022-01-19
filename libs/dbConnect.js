@@ -18,6 +18,7 @@ if (!cached) {
 
 async function dbConnect() {
     if (cached.conn) {
+        console.log('MongoDB Returing Cached Connection')
         return cached.conn
     }
 
@@ -28,7 +29,7 @@ async function dbConnect() {
             maxIdleTimeMS: 10000,
             serverSelectionTimeoutMS: 10000,
             socketTimeoutMS: 20000,
-            bufferCommands: false,
+            // bufferCommands: false,
         }
         cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
             console.log('MongoDB Connected')

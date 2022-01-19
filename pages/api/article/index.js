@@ -35,7 +35,10 @@ const handler = async (req, res) => {
 // essa função não precisa de autenticação
 const handleGet = async (req, res) => {
     console.log('/api/article GET')
-    return res.status(200).json({})
+    const { page = 1, limit = 8 } = req.query
+    const total = await ArticleService.getTotalOfArticles()
+    const articles = await ArticleService.getArticlesByPage(page, limit)
+    return res.status(200).json({ total, articles})
 }
 
 // essa função usa o middleware withAuth para verificar se o usuário está autenticado
