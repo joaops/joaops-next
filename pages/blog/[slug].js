@@ -59,7 +59,10 @@ export default function Article({ article }) {
             {user && user.uid === article.user_uid &&
                 <div>
                     <button onClick={handleUpdate}>Atualizar</button>
-                    <input type="checkbox" checked={checkedDeletePost} onChange={e => setCheckedDeletePost(!checkedDeletePost)} />
+                    <label>
+                        Deletar Artigo?
+                        <input type="checkbox" checked={checkedDeletePost} onChange={e => setCheckedDeletePost(!checkedDeletePost)} />
+                    </label>
                     <button onClick={handleDelete} disabled={!checkedDeletePost}>Deletar</button>
                 </div>
             }
