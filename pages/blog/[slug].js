@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import hljs from 'highlight.js'
 import Head from 'next/head'
 import Router from 'next/router'
+import { DiscussionEmbed } from 'disqus-react'
 
 import { useAuth } from '../../contexts/auth'
 import ArticleService from '../../services/article.service'
@@ -13,8 +14,10 @@ export default function Article({ article }) {
     const [checkedDeletePost, setCheckedDeletePost] = useState(false)
 
     useEffect(() => {
-        hljs.highlightAll()
-    }, [])
+        if (!loading) {
+            hljs.highlightAll()
+        }
+    }, [loading])
 
     const handleUpdate = async () => {
         Router.push(`/editor?slug=${article.slug}`)
@@ -70,6 +73,17 @@ export default function Article({ article }) {
                 {article.tags.map(tag => (<span key={tag.id}>#{tag.name} </span>))}
             </div>
             <div className='ck-content' dangerouslySetInnerHTML={{ __html: article.contents }} />
+            <DiscussionEmbed
+                shortname='joaops'
+                config={
+                    {
+                        url: window.location.href,
+                        identifier: article.id,
+                        title: article.title,
+                        language: 'pt_BR' //e.g. for Traditional Chinese (Taiwan)	
+                    }
+                }
+            />
         </div>
     )
 }
