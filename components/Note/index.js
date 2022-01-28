@@ -5,11 +5,12 @@ import styles from './Note.module.scss'
 
 const NoteEditor = dynamic(() => import('../NoteEditor'), { ssr: false })
 
-const Note = ({ note, update, exclude }) => {
+const Note = ({ note, update, exclude, select }) => {
     const [display, setDisplay] = useState('none')
     const [contents, setContents] = useState('')
     const [top, setTop] = useState(0)
     const [left, setLeft] = useState(0)
+    const [selected, setSelected] = useState(false)
     let offsetTop = 0, offsetLeft = 0
 
     useEffect(() => {
@@ -102,6 +103,26 @@ const Note = ({ note, update, exclude }) => {
         }
     }
 
+    const handleSelected = () => {
+        if (selected) {
+            handleUnselected()
+        } else {
+            setSelected(true)
+            if (select) {
+                select(note.id)
+            }
+            document.onmousedown = handleUnselected
+        }
+    }
+
+    const handleUnselected = (event) => {
+        setSelected(false)
+        document.onmousedown = null
+        if (select) {
+            select('')
+        }
+    }
+
     const styleContainer = {
         display,
         top,
@@ -109,9 +130,13 @@ const Note = ({ note, update, exclude }) => {
         position: 'absolute'
     }
 
+    const styleHeader = {
+        backgroundColor: selected ? '#333' : '#000',
+    }
+
     return (
-        <div className={styles.container} style={styleContainer}>
-            <div className={styles.header} onMouseDown={dragMouseDown} onMouseUp={closeDragElement}>
+        <div className={styles.container} style={styleContainer} onClick={handleSelected}>
+            <div className={styles.header} style={styleHeader} onMouseDown={dragMouseDown} onMouseUp={closeDragElement}>
                 <div className={styles.move}></div>
                 <button className={styles.button} onClick={deleteNote}>X</button>
             </div>

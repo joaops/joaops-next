@@ -9,7 +9,7 @@
         .move {
             display         : flex;
             cursor          : move;
-            background-color: #000;
+            // background-color: #000;
             color           : #FFF;
             align-items     : center;
             justify-content : center;
@@ -32,7 +32,7 @@
     }
 
     .scrollbar {
-        max-height: 435px;
+        max-height: 440px;
         overflow  : auto;
 
         &::-webkit-scrollbar {

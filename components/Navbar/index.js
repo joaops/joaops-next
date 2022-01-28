@@ -22,7 +22,7 @@ export default function Navbar() {
             }
             {user &&
                 <Link href={`/notes`}>
-                    <a>Notes</a>
+                    <a>Notas</a>
                 </Link>
             }
             {user && user.permission === 'admin' &&

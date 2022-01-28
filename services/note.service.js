@@ -1,6 +1,7 @@
 // import { NoteModel, FolderModel } from '../libs/connection'
 import NoteModel from '../models/note.model'
 import FolderModel from '../models/folder.model'
+import FolderService from './folder.service'
 
 const createOne = async (uid, contents, top, left, width, height, parent) => {
     const folderExists = await FolderModel.exists({ user_uid: uid, _id: parent })
@@ -41,7 +42,7 @@ const findAll = async (uid, parent) => {
     return notes.map(note => formatNote(note))
 }
 
-const updateOne = async (uid, id, contents, top, left) => {
+const updateOne = async (uid, id, contents, top, left, parent) => {
     const noteExists = await NoteModel.exists({ user_uid: uid, _id: id })
     if (!noteExists) {
         let error = new Error('Nota Não Encontrada.')
@@ -59,6 +60,16 @@ const updateOne = async (uid, id, contents, top, left) => {
     if (left !== null && left !== undefined) {
         update.left = left
     }
+    if (parent !== null) {
+        const parentExists = await FolderModel.exists({ user_uid: uid, _id: parent })
+        if (!parentExists) {
+            let error = new Error('Pasta Pai Não Encontrada.')
+            error.status = 404
+            error.title = 'Not Found'
+            throw error
+        }
+        update.parent = parent
+    }
     const note = await NoteModel.findOneAndUpdate({ user_uid: uid, _id: id }, update, { new: true })
     return formatNote(note)
 }
@@ -72,6 +83,10 @@ const deleteOne = async (uid, id) => {
         throw error
     }
     await NoteModel.deleteOne({ _id: id })
+    // consulta a lixeira
+    // const trash = await FolderService.findTrash(uid)
+    // reparenta a nota para a lixeira
+    // await NoteModel.findOneAndUpdate({ _id: id }, { parent: trash.id, top: 30, left: 10 }, { new: true })
 }
 
 const formatNote = (note) => {

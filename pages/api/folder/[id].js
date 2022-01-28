@@ -44,19 +44,21 @@ const handleGet = withAuth(async (req, res) => {
     }
     // console.log(req.uid)
     const folder = await FolderService.findOne(req.uid, id)
-    // consultar as notas
+    // consulta a lixeira
+    const trash = await FolderService.findTrash(req.uid)
+    // consulta as notas
     const notes = await NoteService.findAll(req.uid, folder.id)
-    // consultar as subpastas
+    // consulta as subpastas
     const subfolders = await FolderService.findAll(req.uid, folder.id)
-    // consultar o breadcrumb
+    // consulta e o breadcrumb
     const breadcrumb = await FolderService.findBreadcrumb(req.uid, folder.id)
-    return res.status(200).json({ folder, subfolders, notes, breadcrumb })
+    return res.status(200).json({ folder, trash, subfolders, notes, breadcrumb })
 })
 
 const handlePut = withAuth(async (req, res) => {
     console.log('/api/folder/:id PUT')
     const { id } = req.query
-    const { name = null, top = null, left = null } = req.body
+    const { name = null, top = null, left = null, parent = null } = req.body
     if (!id) {
         return res.status(400).json({
             status: 400,
@@ -64,14 +66,14 @@ const handlePut = withAuth(async (req, res) => {
             message: 'O ID da pasta é obrigatório.'
         })
     }
-    if (name === null && top === null && left === null) {
+    if (name === null && top === null && left === null && parent === null) {
         return res.status(400).json({
             status: 400,
             error: 'Bad Request',
-            message: 'Deve ser informado pelo menos um dos campos: name, top, left.'
+            message: 'Deve ser informado pelo menos um dos campos: name, top, left, parent.'
         })
     }
-    const folder = await FolderService.updateOne(req.uid, id, name, top, left)
+    const folder = await FolderService.updateOne(req.uid, id, name, top, left, parent)
     return res.status(200).json(folder)
 })
 

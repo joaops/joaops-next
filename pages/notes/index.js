@@ -1,18 +1,18 @@
 import Router from 'next/router'
-import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
-import { useAuth } from '../contexts/auth'
+import { useAuth } from '../../contexts/auth'
 
-import Breadcrumb from '../components/Breadcrumb'
-import Folder from '../components/Folder'
-import Note from '../components/Note'
+import Breadcrumb from '../../components/Breadcrumb'
+import Folder from '../../components/Folder'
+import Note from '../../components/Note'
 
-import styles from '../styles/Notes.module.scss'
+import styles from '../../styles/Notes.module.scss'
 
 export default function Notes() {
     const { loading, user } = useAuth()
     const [folder, setFolder] = useState({})
+    const [trash, setTrash] = useState({})
     const [subfolders, setSubfolders] = useState([])
     const [notes, setNotes] = useState([])
     const [breadcrumb, setBreadcrumb] = useState([])
@@ -34,6 +34,7 @@ export default function Notes() {
                 if (status === 200) {
                     const data = await response.json()
                     setFolder(data.folder)
+                    setTrash(data.trash)
                     setSubfolders(data.subfolders)
                     setNotes(data.notes)
                     setBreadcrumb(data.breadcrumb)
@@ -43,6 +44,10 @@ export default function Notes() {
             findRootFolder()
         }
     }, [user])
+
+    const goToTrash = async () => {
+        Router.push('/notes/trash')
+    }
 
     const createNewFolder = async () => {
         const headers = new Headers()
@@ -92,19 +97,23 @@ export default function Notes() {
         }
     }
 
-    const deleteFolder = async (id) => {
+    const moverPastaParaLixeira = async (id) => {
         const headers = new Headers()
         headers.append('Content-Type', 'application/json')
         headers.append('Authorization', `Bearer ${user.token}`)
+        let body = {
+            parent: trash.id
+        }
         const options = {
-            method: 'DELETE',
-            headers
+            method: 'PUT',
+            headers,
+            body: JSON.stringify(body)
         }
         const response = await fetch(`/api/folder/${id}`, options)
         const status = response.status
         if (status === 200) {
-            await response.json()
-            setSubfolders(subfolders.filter(subfolder => subfolder.id !== id))
+            const data = await response.json()
+            setSubfolders(subfolders.filter(subfolder => subfolder.id !== data.id))
         }
     }
 
@@ -121,6 +130,7 @@ export default function Notes() {
         if (status === 200) {
             const data = await response.json()
             setFolder(data.folder)
+            setTrash(data.trash)
             setSubfolders(data.subfolders)
             setNotes(data.notes)
             setBreadcrumb(data.breadcrumb)
@@ -175,19 +185,23 @@ export default function Notes() {
         }
     }
 
-    const deleteNote = async (id) => {
+    const moverNotaParaLixeira = async (id) => {
         const headers = new Headers()
         headers.append('Content-Type', 'application/json')
         headers.append('Authorization', `Bearer ${user.token}`)
+        let body = {
+            parent: trash.id
+        }
         const options = {
-            method: 'DELETE',
-            headers
+            method: 'PUT',
+            headers,
+            body: JSON.stringify(body)
         }
         const response = await fetch(`/api/note/${id}`, options)
         const status = response.status
         if (status === 200) {
-            await response.json()
-            setNotes(notes.filter(note => note.id !== id))
+            const data = await response.json()
+            setNotes(notes.filter(note => note.id !== data.id))
         }
     }
 
@@ -220,13 +234,13 @@ export default function Notes() {
         const list = []
         list = [...notes, ...subfolders]
         return list.sort(sortByUpdatedAt).map(item => {
-            if (item.name) {
+            if (item.name != null) {
                 return (
                     <Folder key={item.id} folder={item} update={updateFolder} enter={enterTheFolder} select={setSelected} />
                 )
             } else {
                 return (
-                    <Note key={item.id} note={item} update={updateNote} exclude={deleteNote} />
+                    <Note key={item.id} note={item} update={updateNote} exclude={moverNotaParaLixeira} />
                 )
             }
         })
@@ -235,10 +249,11 @@ export default function Notes() {
     return (
         <div className={styles.container}>
             <Breadcrumb breadcrumb={breadcrumb} goTo={enterTheFolder} />
+            <button onClick={goToTrash}>Lixeira</button>
             <button onClick={createNewFolder}>Criar Pasta</button>
             {
                 selected &&
-                <button onMouseDown={() => deleteFolder(selected)}>Excluir Pasta</button>
+                <button onMouseDown={() => moverPastaParaLixeira(selected)}>Excluir</button>
             }
             <button onClick={createNewNote}>Criar Nota</button>
             {

@@ -31,7 +31,7 @@ const handler = async (req, res) => {
 const handlePut = withAuth(async (req, res) => {
     console.log('/api/note/:id PUT')
     const { id } = req.query
-    const { contents = null, top = null, left = null } = req.body
+    const { contents = null, top = null, left = null, parent = null } = req.body
     if (!id) {
         return res.status(400).json({
             status: 400,
@@ -39,14 +39,14 @@ const handlePut = withAuth(async (req, res) => {
             message: 'O ID da pasta é obrigatório.'
         })
     }
-    if (contents === null && top === null && left === null) {
+    if (contents === null && top === null && left === null && parent === null) {
         return res.status(400).json({
             status: 400,
             error: 'Bad Request',
-            message: 'Deve ser informado pelo menos um dos campos: contents, top, left.'
+            message: 'Deve ser informado pelo menos um dos campos: contents, top, left, parent.'
         })
     }
-    const note = await NoteService.updateOne(req.uid, id, contents, top, left)
+    const note = await NoteService.updateOne(req.uid, id, contents, top, left, parent)
     return res.status(200).json(note)
 })
 

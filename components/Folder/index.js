@@ -81,7 +81,7 @@ const Folder = ({ folder, update, enter, select }) => {
     }
 
     const handleDoubleClick = () => {
-        handleUnselected()
+        // handleUnselected()
         enter(folder.id)
     }
 
