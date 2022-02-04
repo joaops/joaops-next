@@ -38,6 +38,23 @@ const findOne = async (uid, id) => {
     return formatFolder(folder)
 }
 
+// consulta as pastas que podem ser selecionadas como pasta pai para restaurar os itens da lixeira
+// Não pode ser nem a lixeira e nem as subpastas da lixeira
+const findFoldersToRestore = async (uid) => {
+    // consulta a lixeira
+    const trash = await findTrash(uid)
+    // consulta todas as pastas que não são filhas da lixeira e que não é a própria lixeira
+    const folders = await FolderModel.find({ user_uid: uid, parent: { $ne: trash.id }, _id: { $ne: trash.id } })
+    // retorna as pastas formatadas
+    return folders.map(folder => {
+        return {
+            id: folder._id,
+            name: folder.name,
+            parent: folder.parent
+        }
+    })
+}
+
 // Retorna todas as subpastas de uma pasta
 const findAll = async (uid, parent) => {
     const rootExists = await FolderModel.exists({ user_uid: uid, _id: parent })
@@ -169,6 +186,7 @@ const FolderService = {
     findRoot,
     findTrash,
     findOne,
+    findFoldersToRestore,
     findAll,
     create,
     updateOne,

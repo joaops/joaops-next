@@ -11,11 +11,13 @@ import dbConnect from '../../libs/dbConnect'
 
 export default function Article({ article }) {
     const { loading, user } = useAuth()
+    const [renderizarDisqus, setRenderizarDisqus] = useState(false)
     const [checkedDeletePost, setCheckedDeletePost] = useState(false)
 
     useEffect(() => {
         if (!loading) {
             hljs.highlightAll()
+            setRenderizarDisqus(true)
         }
     }, [loading])
 
@@ -40,6 +42,8 @@ export default function Article({ article }) {
         }
     }
 
+    /*
+    // Isso está ferrando com o SEO, os buscadores pegam o primeiro o loading da página e não o artigo!
     if (loading) {
         return (
             <div className={styles.container}>
@@ -47,6 +51,7 @@ export default function Article({ article }) {
             </div>
         )
     }
+    */
 
     return (
         <div className={styles.container}>
@@ -59,7 +64,7 @@ export default function Article({ article }) {
             <h1>{article.title}</h1>
             <p>{article.description}</p>
             <p>By {article.username} At {article.createdAt}</p>
-            {user && user.uid === article.user_uid &&
+            {!loading && user && user.uid === article.user_uid &&
                 <div>
                     <button onClick={handleUpdate}>Atualizar</button>
                     <label>
@@ -73,17 +78,20 @@ export default function Article({ article }) {
                 {article.tags.map(tag => (<span key={tag.id}>#{tag.name} </span>))}
             </div>
             <div className='ck-content' dangerouslySetInnerHTML={{ __html: article.contents }} />
-            <DiscussionEmbed
-                shortname='joaops'
-                config={
-                    {
-                        url: window.location.href,
-                        identifier: article.id,
-                        title: article.title,
-                        language: 'pt_BR' //e.g. for Traditional Chinese (Taiwan)	
+            {
+                renderizarDisqus &&
+                <DiscussionEmbed
+                    shortname='joaops'
+                    config={
+                        {
+                            url: window.location.href,
+                            identifier: article.id,
+                            title: article.title,
+                            language: 'pt_BR' //e.g. for Traditional Chinese (Taiwan)	
+                        }
                     }
-                }
-            />
+                />
+            }
         </div>
     )
 }

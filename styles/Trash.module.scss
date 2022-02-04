@@ -11,6 +11,14 @@
     left                 : 0;
     right                : 0;
 
+    .header {
+        background-color: #191919;
+        padding         : 10px 16px;
+        margin-bottom   : 4px;
+        color           : #EEEEEE;
+        font-size       : 18px;
+    }
+
     overflow: auto;
 
     &::-webkit-scrollbar {

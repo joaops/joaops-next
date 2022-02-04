@@ -9,11 +9,14 @@ export default function Trash() {
     const { loading, user } = useAuth()
     const [selected, setSelected] = useState('')
     // const [trash, setTrash] = useState()
-    const [home, setHome] = useState()
+    const [restoreTo, setRestoreTo] = useState()
+    const [foldersToRestore, setFoldersToRestore] = useState([])
     const [folders, setFolders] = useState([])
     const [notes, setNotes] = useState([])
 
     useEffect(() => {
+        // canceling async function
+        let isSubscribed = true
         // se tem um usuário logado
         if (user) {
             // consulta a lixeira
@@ -27,15 +30,17 @@ export default function Trash() {
                 }
                 const response = await fetch('/api/folder/trash', options)
                 const status = response.status
-                if (status === 200) {
+                if (status === 200 && isSubscribed) {
                     const data = await response.json()
-                    setHome(data.home)
+                    setFoldersToRestore(data.foldersToRestore)
+                    setRestoreTo(data.home.id)
                     setFolders(data.folders)
                     setNotes(data.notes)
                 }
             }
             findTrash()
         }
+        return () => { (isSubscribed = false) }
     }, [user])
 
     const deleteItem = async (id) => {
@@ -102,7 +107,7 @@ export default function Trash() {
         headers.append('Content-Type', 'application/json')
         headers.append('Authorization', `Bearer ${user.token}`)
         let body = {
-            parent: home.id
+            parent: restoreTo
         }
         const options = {
             method: 'PUT',
@@ -122,7 +127,7 @@ export default function Trash() {
         headers.append('Content-Type', 'application/json')
         headers.append('Authorization', `Bearer ${user.token}`)
         let body = {
-            parent: home.id
+            parent: restoreTo
         }
         const options = {
             method: 'PUT',
@@ -150,9 +155,9 @@ export default function Trash() {
     }
 
     // lógica que alinha os itens excluídos dentro da lixeira
-    let proximaPosicaoPasta = { top: 30, left: 10 }
+    let proximaPosicaoPasta = { top: 80, left: 10 }
     const distanciaEntrePastas = { top: 120, left: 110 }
-    let proximaPosicaoNota = { top: 150, left: 10 }
+    let proximaPosicaoNota = { top: 80, left: 10 }
     const distanciaEntreNotas = { top: 480, left: 330 }
     const limiteHorizontal = { min: 10, max: 1220 }
 
@@ -181,11 +186,22 @@ export default function Trash() {
 
     return (
         <div className={styles.container}>
+            <div className={styles.header}>Lixeira</div>
+            <label>Restaurar Para ...</label>
+            <select onChange={(e) => setRestoreTo(e.target.value)}>
+                {
+                    foldersToRestore.map(folder => {
+                        return (
+                            <option key={folder.id} value={folder.id}>{folder.name}</option>
+                        )
+                    })
+                }
+            </select>
             {
                 selected &&
                 <>
-                    <button onMouseDown={() => deleteItem(selected)}>Excluir</button>
                     <button onMouseDown={() => restoreItem(selected)}>Restaurar</button>
+                    <button onMouseDown={() => deleteItem(selected)}>Excluir</button>
                 </>
             }
             {

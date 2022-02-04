@@ -19,6 +19,8 @@ export default function Notes() {
     const [selected, setSelected] = useState('')
 
     useEffect(() => {
+        // canceling async function
+        let isSubscribed = true
         // carregar a pasta raiz
         if (user) {
             const findRootFolder = async () => {
@@ -31,7 +33,7 @@ export default function Notes() {
                 }
                 const response = await fetch('/api/folder', options)
                 const status = response.status
-                if (status === 200) {
+                if (status === 200 && isSubscribed) {
                     const data = await response.json()
                     setFolder(data.folder)
                     setTrash(data.trash)
@@ -43,6 +45,7 @@ export default function Notes() {
 
             findRootFolder()
         }
+        return () => { (isSubscribed = false) }
     }, [user])
 
     const goToTrash = async () => {
